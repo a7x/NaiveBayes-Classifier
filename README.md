@@ -1,3 +1,5 @@
+#Naive Bayes Classifier
+
 This is a simple implementation of a Naive Bayes classifier. The data that has been used is from [OpenClassroom](http://openclassroom.stanford.edu).  
 
 
