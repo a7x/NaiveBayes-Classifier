@@ -1,32 +1,27 @@
 #This script reads all files in all directories of the folder taken from the openClassroom site and generates the dictionary, which we can then store in a file 
-folders = ["spam-train","spam-test","nonspam-train","nonspam-test"]
-import os,sys
-#We need a dictionary to store word occurences. What we can do is create a default dict and then update the frequencies. Write it all into a file all at once. 
-from collections import * 
+
+from collections import defaultdict
+from collections import OrderedDict
+import os
 import operator
+import sys
+
+
 dictionary = defaultdict(int)
-listWords = []
-fdict = open(sys.argv[2],'w') #File to write all the entries in the dictionary 
-for root,dirnames,filenames in os.walk(sys.argv[1]):
-	for d in dirnames: #For each directory 
-		print 'In directory',d
-		for f in os.listdir(d):
-			data = open ( os.path.join(sys.argv[1],d,f),'r')
-			for line in data:
-				words = line.split(" ")#Split words on space 
-				for w in words:
-					dictionary[w] += 1
-count = 0
 
-dictionary = OrderedDict(sorted(dictionary.items(),key = lambda t: t[1]))
-#print dictionary
-for k in dictionary.keys():
-	count = count+1
 
-	fdict.write(k+" "+str(dictionary[k])+"\n")
+with open(sys.argv[2], 'w') as fdict:
+	for root, dirnames, filenames in os.walk(sys.argv[1]):
+		for d in dirnames:
+			for f in os.listdir(os.path.join(root, d)):
+				with open(os.path.join(sys.argv[1], d, f)) as data:
+					for line in data:
+						words = line.split()
+						for w in words:
+							dictionary[w] += 1
+	dictionary = OrderedDict(sorted(dictionary.items(),key = lambda t: t[1]))
+	for k in dictionary:
+		fdict.write("{} {} \n".format(k, str(dictionary[k])))
 
-	#fdict.write(k +" "+str(dictionary[k])+"\n")
 	
-print 'Number of items in the dict',count
-print 'Len of list words is ',len(listWords)
 

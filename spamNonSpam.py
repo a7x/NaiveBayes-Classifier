@@ -1,8 +1,10 @@
 '''Now given a mail, split it in terms of spaces  ,  then ,  add up the log probability of each .  Multiply it with the spam probability  . Do the same thing for non-spam 
    Whichever is higher  wins .  Lets start
 '''
-import sys,os
-from math import *
+import math
+import os
+import sys
+
 
 def makeDict(f):
 	temp = {}
@@ -11,7 +13,9 @@ def makeDict(f):
 		prob = line.split(" ")
 		temp[prob[0]] = prob[1]
 	return temp
-def predict(basepath,f,dictionary):
+
+
+def predict(basepath, f, dictionary):
 	toClassify = open(os.path.join(basepath,f),'r')
 	for line in toClassify:
 		words = line.split(" ")
@@ -31,8 +35,8 @@ def predict(basepath,f,dictionary):
 			except:
 				pass
 				
-	totalSpamP = spamP + log ( 0.5 )
-	totalnonSpamP = nonspamP + log ( 0.5 )
+	totalSpamP = spamP + math.log ( 0.5 )
+	totalnonSpamP = nonspamP + math.log ( 0.5 )
 	#print 'TOtal spam and non-spam probs are ',totalSpamP,totalnonSpamP
 	if(totalSpamP > totalnonSpamP):
 		return True
@@ -45,15 +49,16 @@ dictionaryWords = makeDict(sys.argv[5]) #Pass the dictionary 2500 words here
 #print spamProbs
 spamCount = 0
 nonspamCount = 0
-print 'No of files in spam is',len(os.listdir(sys.argv[3]))
+#print 'No of files in spam is',len(os.listdir(sys.argv[3]))
 for f in os.listdir(sys.argv[3]):
 	
 	if(predict(sys.argv[3],f,dictionaryWords)):
 		spamCount = spamCount + 1
 	else:
 		nonspamCount = nonspamCount + 1
-print 'No. of spam in ',sys.argv[3],' is ',str(spamCount),' no. of non-spam',str(nonspamCount)
-print 'No of files in non-spam is',len(os.listdir(sys.argv[4]))
+
+#print 'No. of spam in ',sys.argv[3],' is ',str(spamCount),' no. of non-spam',str(nonspamCount)
+#print 'No of files in non-spam is', len(os.listdir(sys.argv[4]))
 spamCount = 0 
 nonspamCount =0
 for f in os.listdir(sys.argv[4]):
@@ -62,5 +67,6 @@ for f in os.listdir(sys.argv[4]):
 		spamCount = spamCount + 1
 	else:
 		nonspamCount = nonspamCount + 1
-print 'No. of spam in ',sys.argv[4],' is ',spamCount,' no. of non-spam',nonspamCount
+#print 'No. of spam in ',sys.argv[4],' is ',spamCount,' no. of non-spam',nonspamCount
+print('Spam in {} is {} and non-spam is {}'.format(sys.argv[4], spamCount, nonspamCount))
 
