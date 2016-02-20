@@ -20,8 +20,6 @@ nonspamDict = defaultdict(int)
 spamFolders = ["spam-train"]
 nonspamFolders = ["nonspam-train"]
 path = sys.argv[1] #Base path
-spamVector = open(sys.argv[2], 'w') #Write all spam values into this 
-nonspamVector = open(sys.argv[3], 'w') #Non-spam values
 
 #Go through all files in spam and  iteratively add values
 spamSize = 0
@@ -44,7 +42,7 @@ for f in os.listdir(os.path.join(path, nonspamFolders[0])):
 			words = line.split()
 			nonspamSize += len(words)
 			for w in words:
-				nonspamDict[w]+=1
+				nonspamDict[w] += 1
 
 
 logProbspam = {}
@@ -63,7 +61,10 @@ for k in nonspamDict:
 	p = math.log((numerator)/nonspamDenominator)
 	logProbnonSpam[k] = p
 
-for k in logProbnonSpam:
-	nonspamVector.write(k + " " + str(logProbnonSpam[k]) + "\n")
-for k in logProbspam:
-	spamVector.write(k + " " + str(logProbspam[k]) + "\n")
+with open(sys.argv[3], 'w') as nonspamVector:
+	for k in logProbnonSpam:
+		nonspamVector.write(k + " " + str(logProbnonSpam[k]) + "\n")
+		
+with open(sys.argv[2], 'w') as spamVector:
+	for k in logProbspam:
+		spamVector.write(k + " " + str(logProbspam[k]) + "\n")
